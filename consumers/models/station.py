@@ -35,8 +35,10 @@ class Station:
         status_dict = {"train_id": train_id, "status": train_status.replace("_", " ")}
         if direction == "a":
             self.dir_a = status_dict
+            logger.info("Direction A: %s", self.dir_a)
         else:
             self.dir_b = status_dict
+            logger.info("Direction B: %s", self.dir_b)
 
     def process_message(self, json_data):
         """Handles arrival and turnstile messages"""
