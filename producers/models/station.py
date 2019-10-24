@@ -19,9 +19,7 @@ class Station(Producer):
     value_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/arrival_value.json")
 
     def __init__(self, station_id, name, color, direction_a=None, direction_b=None):
-        self.name = name
-        station_name = (
-            self.name.lower()
+        self.name = (name.lower()
             .replace("/", "_and_")
             .replace(" ", "_")
             .replace("-", "_")
@@ -54,6 +52,15 @@ class Station(Producer):
         #
         #
         logger.info("Train Arrival Log")
+        print(train, direction, prev_station_id, prev_direction, Station.value_schema, {
+            "station_id": self.station_id,
+            "train_id": train.train_id,
+            "direction": direction,
+            "train_status": train.status,
+            "line": self.color,
+            "prev_station_id": prev_station_id,
+            "prev_direction": prev_direction
+        })
         self.producer.produce(
            topic=self.topic_name,
            key={"timestamp": self.time_millis()},
@@ -61,7 +68,7 @@ class Station(Producer):
                "station_id": self.station_id,
                "train_id": train.train_id,
                "direction": direction,
-               "train_status": train.status.name,
+               "train_status": train.status,
                "line": self.color,
                "prev_station_id": prev_station_id,
                "prev_direction": prev_direction

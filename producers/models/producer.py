@@ -43,7 +43,6 @@ class Producer:
         if self.topic_name not in Producer.existing_topics:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
-
         self.producer = AvroProducer({'bootstrap.servers': self.broker_properties["bootstrap.servers"],
                                       'schema.registry.url': self.broker_properties["schema.registry.url"]},
                                      default_key_schema=self.key_schema, default_value_schema=self.value_schema

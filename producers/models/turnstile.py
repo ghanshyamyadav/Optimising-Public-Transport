@@ -20,13 +20,6 @@ class Turnstile(Producer):
 
     def __init__(self, station):
         """Create the Turnstile"""
-        station_name = (
-            station.name.lower()
-            .replace("/", "_and_")
-            .replace(" ", "_")
-            .replace("-", "_")
-            .replace("'", "")
-        )
 
         super().__init__(
             f"chicago.cta.turnstile",
@@ -43,13 +36,12 @@ class Turnstile(Producer):
         num_entries = self.turnstile_hardware.get_entries(timestamp, time_step)
         logger.info("Turnstile kafka Logging")
         for _ in range(num_entries):
-
             self.producer.produce(
                 topic=self.topic_name,
                 key={"timestamp": self.time_millis()},
                 value={
                     "station_id":self.station.station_id,
                     "station_name":self.station.name,
-                    "line":self.station.color.name
+                    "line":self.station.color
                 },
             )
